@@ -39,7 +39,8 @@ class Product(models.Model):
     )
     category = models.ForeignKey(
         Category,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
         verbose_name="категория",
         help_text="введите название категории",
         related_name="product",
