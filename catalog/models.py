@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 
@@ -40,13 +42,13 @@ class Product(models.Model):
         on_delete=models.CASCADE,
         verbose_name="категория",
         help_text="введите название категории",
-        related_name='product',
+        related_name="product",
     )
     price = models.IntegerField(
         verbose_name="стоимость", help_text="стоимость продукта"
     )
-    created_at = models.DateField(verbose_name="дата создания")
-    updated_at = models.DateField(verbose_name="дата редактирования")
+    created_at = models.DateField(default=datetime.now, verbose_name="дата создания")
+    updated_at = models.DateField(default=datetime.now,verbose_name="дата редактирования")
 
     class Meta:
         verbose_name = "Продукт"
