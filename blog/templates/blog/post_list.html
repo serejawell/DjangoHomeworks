@@ -1,0 +1,36 @@
+{% extends 'catalog/base.html'%}
+{% load my_tags %}
+{% block content %}
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'blog:post_create' %}"
+               role="button">Создать пост</a>
+        </div>
+    </div>
+</div>
+
+{% for object in object_list %}
+<div class="card text-center mb-4">
+    <div class="card-header">
+        {{ object.created_at }}
+    </div>
+    <div class="card-body">
+        <h2> {{ object.title }}</h2>
+        <p class="card-text">{{ object.context|slice:':100' }}...<a href="{% url 'blog:post_detail' object.pk %}">см. далее</a></p>
+    </div>
+    <div class="card-footer text-body-secondary">
+        <div class="btn-group">
+            <a href="{% url 'blog:post_detail' object.pk %}" class="btn btn-primary">Перейти</a>
+            <a class="btn btn-warning" href="{% url 'blog:post_update' object.pk %}"
+               role="button">Редактировать</a>
+            <a class="btn btn-danger" href="{% url 'blog:post_delete' object.pk %}"
+               role="button">Удалить</a>
+
+        </div>
+        Просмотры: {{ object.views_counter}}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'catalog/base.html'%}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="mx-auto p-2">
+                <form class="row" method="post" enctype="multipart/form-data">
+                    <div class="card">
+                        <div class="text-center">
+                            <div class="card-body">
+                                {% csrf_token %}
+                            </div>
+                            <h3>Действительно ли хотите удалить пост {{ object.title }}?</h3>
+                            <p>Он собрал просмотров: {{ object.views_counter}} </p>
+                        </div>
+                        <button type="submit" class="btn btn-danger">
+                            Удалить
+                        </button>
+                        <a href="{% url 'blog:post_list' %}" class="btn btn-warning" role="button">Отменить</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
