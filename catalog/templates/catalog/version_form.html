@@ -1,12 +1,12 @@
 {% extends 'catalog/base.html'%}
 {% block content %}
-<form method="post" class="row" enctype="multipart/form-data">
+<div class="col-12">
+    <form method="post" class="row" enctype="multipart/form-data">
 
-    <div class="col-6">
-        <div class="align-content-center">
+        <div class="col-6">
             <div class="card">
                 <div class="card-header">
-                    <h2>Добавить продукт</h2>
+                    <h2>Добавить версию</h2>
                     <div class="card-body">
 
                         {% csrf_token %}
@@ -19,8 +19,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 </div>
 {% endblock %}
 

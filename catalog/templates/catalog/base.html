@@ -18,13 +18,7 @@
 
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
-    <meta name="theme-color" content="#712cf9">
+
 
 
     <style>
@@ -192,6 +186,7 @@
                     у вас появляется больше возможностей купить продкуты.</p>
                 <p>
                     <a href="{% url 'catalog:product_create'%}" class="btn btn-primary my-2">Создать продукт</a>
+                    <a href="{% url 'catalog:version_create'%}" class="btn btn-primary my-2">Создать версию</a>
                     <a href="{% url 'catalog:product_list'%}" class="btn btn-primary my-2">Все продукты</a>
                     <a href="{% url 'blog:post_list'%}" class="btn btn-primary my-2">Наш блог</a>
                 </p>
