@@ -30,4 +30,4 @@ class VersionForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Version
 
-        fields = ('product','version_name')
+        fields = ('product','version_name',)
