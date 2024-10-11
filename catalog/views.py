@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 
@@ -5,7 +6,7 @@ from catalog.forms import ProductForm, VersionForm
 from catalog.models import Product, Version
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     context_object_name = 'products'
 
@@ -16,7 +17,8 @@ class ProductListView(ListView):
         return context
 
 
-class ProductDetailView(DetailView):
+
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
     def get_object(self, queryset=None):
@@ -26,16 +28,23 @@ class ProductDetailView(DetailView):
         return self.object
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user  # Привязываем текущего пользователя к продукту
+        return super().form_valid(form)
 
-class ProductUpdateView(UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
+
+    def get_queryset(self):
+        return Product.objects.filter(owner=self.request.user)
 
 
 class VersionCreateView(CreateView):
@@ -64,6 +73,12 @@ class VersionUpdateView(UpdateView):
     success_url = reverse_lazy('catalog:product_list')
 
 
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('catalog:product_list')
+
+
+
 # class ProductCreateView(CreateView):
 #     model = Product
 #     fields = ('name', 'description', 'image', 'category', 'price')
@@ -85,8 +100,3 @@ class VersionUpdateView(UpdateView):
 #             new_post.save()
 #
 #         return super().form_valid(form)
-
-
-class ProductDeleteView(DeleteView):
-    model = Product
-    success_url = reverse_lazy('catalog:product_list')
