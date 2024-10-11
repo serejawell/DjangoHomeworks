@@ -1,4 +1,6 @@
-from django.urls import path
+from django.urls import path, include
+
+
 from catalog.apps import CatalogConfig
 from catalog.views import ProductListView, ProductDetailView, ProductCreateView, ProductUpdateView, ProductDeleteView, \
     VersionCreateView, VersionUpdateView, VersionDeleteView, VersionDetailView, VersionListView
