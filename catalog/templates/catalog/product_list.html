@@ -1,30 +1,27 @@
 {% extends 'catalog/base.html' %}
 {% load my_tags %}
 {% block content %}
-<div class="album py-5 bg-body-tertiary">
+<div class="album py-5 bg-light">
     <div class="container">
-        <div class="row">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             {% for object in object_list %}
-            <div class="col-6">
-                <div class="card shadow-sm">
-                    <img src="{{ object.image | media_filter }}">
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ object.image | media_filter }}" class="bd-placeholder-img card-img-top" alt="{{ object.name }}" style="height: 200px; width: 100%; object-fit: contain; background-color: white;">
                     <div class="card-body">
-                        <h2>{{ object.name }}</h2>
+                        <h5 class="card-title">{{ object.name }}</h5>
                         <p class="card-text">{{ object.description }}</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <a class="btn btn-primary" href="{% url 'catalog:product_detail' object.pk %}"
-                                   role="button">Посмотреть</a>
-                            </div>
-                            <div>
-                                <small class="text-body-secondary"> Просмотры: {{ object.views_counter }}</small>
-                                <div>
-                                    {% if object.get_active_version %}
-                                        <small>Активная версия: {{ object.get_active_version.version_name }} (Версия {{ object.get_active_version.version_number }})</small>
-                                    {% else %}
-                                        <p>Активная версия отсутствует.</p>
-                                    {% endif %}
-                                </div>
+                            <a class="btn btn-primary" href="{% url 'catalog:product_detail' object.pk %}" role="button">Посмотреть</a>
+                            <div class="text-end">
+                                <small class="text-muted">Просмотры: {{ object.views_counter }}</small><br>
+                                {% if object.get_active_version %}
+                                    <small>Активная версия: {{ object.get_active_version.version_name }} (Версия {{ object.get_active_version.version_number }})</small>
+                                {% else %}
+                                    <small class="text-danger">Активная версия отсутствует.</small>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

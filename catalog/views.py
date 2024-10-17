@@ -1,8 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from catalog.models import Product, Version
 
 
@@ -17,7 +18,6 @@ class ProductListView(LoginRequiredMixin, ListView):
         return context
 
 
-
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
@@ -28,9 +28,10 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         return self.object
 
 
-class ProductCreateView(LoginRequiredMixin, CreateView):
+class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
+    permission_required = 'catalog.add_product'
     success_url = reverse_lazy('catalog:product_list')
 
     def form_valid(self, form):
@@ -43,8 +44,22 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
 
-    def get_queryset(self):
-        return Product.objects.filter(owner=self.request.user)
+
+    def get_form_class(self):
+        user = self.request.user
+
+        # Здесь выводим все права пользователя в консоль
+        print(user.get_all_permissions())  # Это выведет все права пользователя в терминал
+
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm("catalog.can_edit_description") and user.has_perm(
+                "catalog.can_edit_category") and user.has_perm("catalog.set_published"):
+            print("Модераторская форма выбрана")  # Добавь этот вывод для проверки
+            return ProductModeratorForm
+        raise PermissionDenied
+
+        print("Модераторская форма выбрана")  # Добавь этот вывод для проверки
 
 
 class VersionCreateView(CreateView):
@@ -76,8 +91,6 @@ class VersionUpdateView(UpdateView):
 class ProductDeleteView(DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:product_list')
-
-
 
 # class ProductCreateView(CreateView):
 #     model = Product
